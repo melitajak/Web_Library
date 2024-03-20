@@ -170,6 +170,7 @@ def assign_reader(book_id):
     data = request.json
     reader_id = data.get('reader_id')
     if reader_id:
+        reader_id = int(reader_id)
         for book in books:
             if book.id == book_id:
                 for reader in readers:
@@ -187,6 +188,7 @@ def assign_library(book_id):
     data = request.json
     library_id = data.get('library_id')
     if library_id:
+        library_id = int(library_id)
         for book in books:
             if book.id == book_id:
                 for library in libraries:
@@ -196,7 +198,7 @@ def assign_library(book_id):
                         return jsonify(book.__dict__)
                 return jsonify({'error': 'Library not found'}), 404 
         return jsonify({'error': 'Book not found'}), 404 
-    return jsonify({'error': 'Invalid data supplied'}), 400 
+    return jsonify({'error': 'Invalid data supplied'}), 400
 
 #unassign the reader
 @app.delete('/assign_reader/<int:book_id>')
