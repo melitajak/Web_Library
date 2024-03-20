@@ -4,7 +4,7 @@ class Library:
         self.name = name
 
 libraries = [
-    Library(1, "Library 1"),
-    Library(2, "Library 2"),
-    Library(3, "Library 3"),
+    Library(1, "Central Library"),
+    Library(2, "Downtown Library"),
+    Library(3, "Main Street Library"),
 ]
