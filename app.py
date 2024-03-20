@@ -12,6 +12,7 @@ def index():
         'readers': [reader.__dict__ for reader in readers],
         'libraries': [library.__dict__ for library in libraries]
     })
+    
 
 #GET requests
 @app.get('/books')
@@ -69,7 +70,7 @@ def delete_book(book_id):
     for book in books:
         if book.id == book_id:
             books.remove(book)
-            return jsonify({'message': 'Book deleted successfully'})
+            return jsonify([book.__dict__ for book in books]), 200
     return jsonify({'error': 'Book not found'}), 404
 
 #update book
@@ -80,23 +81,27 @@ def update_book(book_id):
     author = data.get('author')
     reader_id = data.get('reader_id')
     library_id = data.get('library_id')
+    
     for book in books:
         if book.id == book_id:
-            book.title = title
+            book.title = title 
             book.author = author
             if reader_id:
                 for reader in readers:
                     if reader.id == reader_id:
                         book.reader_id = reader_id
                         book.reader_name = reader.name
+                        break
             if library_id:
                 for library in libraries:
                     if library.id == library_id:
                         book.library_id = library_id
                         book.library_name = library.name
-            
-            return jsonify(book.__dict__)  
-        return jsonify({'error': 'Book not found'}), 404
+                        break
+            return jsonify(book.__dict__)
+    
+    return jsonify({'error': 'Book not found'}), 404
+
 
 #create reader
 @app.post('/readers')
@@ -116,7 +121,7 @@ def delete_reader(reader_id):
     for reader in readers:
         if reader.id == reader_id:
             readers.remove(reader)
-            return jsonify({'message': 'Reader deleted successfully'})
+            return jsonify([reader.__dict__ for reader in readers]), 200
     return jsonify({'error': 'Reader not found'}), 404
 
 #update reader
@@ -150,7 +155,7 @@ def delete_library(library_id):
     for library in libraries:
         if library.id == library_id:
             libraries.remove(library)
-            return jsonify({'message': 'Library deleted successfully'})
+            return jsonify([library.__dict__ for library in libraries]), 200
     return jsonify({'error': 'Library not found'}), 404
 
 #update library
@@ -164,9 +169,9 @@ def update_library(library_id):
             return jsonify(library.__dict__)
     return jsonify({'error': 'Library not found'}), 404
 
-#assign reader to a book
-@app.post('/assign_reader/<int:book_id>')
-def assign_reader(book_id):
+# Update book with reader
+@app.put('/books/<int:book_id>/reader')
+def update_book_reader(book_id):
     data = request.json
     reader_id = data.get('reader_id')
     if reader_id:
@@ -182,9 +187,9 @@ def assign_reader(book_id):
         return jsonify({'error': 'Book not found'}), 404
     return jsonify({'error': 'Invalid data supplied'}), 400 
 
-#assign library to a book
-@app.post('/assign_library/<int:book_id>')
-def assign_library(book_id):
+# Update book with library
+@app.put('/books/<int:book_id>/library')
+def update_book_library(book_id):
     data = request.json
     library_id = data.get('library_id')
     if library_id:
@@ -200,24 +205,31 @@ def assign_library(book_id):
         return jsonify({'error': 'Book not found'}), 404 
     return jsonify({'error': 'Invalid data supplied'}), 400
 
-#unassign the reader
-@app.delete('/assign_reader/<int:book_id>')
-def delete_assigned_reader(book_id):
+
+# Unassign the reader from the book
+@app.delete('/books/<int:book_id>/reader')
+def unassign_reader(book_id):
     for book in books:
         if book.id == book_id:
-            del book.reader_id
-            del book.reader_name 
-            return jsonify(book.__dict__)
+            if hasattr(book, 'reader_id'):
+                del book.reader_id
+                del book.reader_name 
+                return jsonify(book.__dict__)
+            else:
+                return jsonify({'error': 'Reader is not assigned to this book'}), 400
     return jsonify({'error': 'Book not found'}), 404
 
-#unassign the library
-@app.delete('/assign_library/<int:book_id>')
-def delete_assigned_library(book_id):
+# Unassign the library from the book
+@app.delete('/books/<int:book_id>/library')
+def unassign_library(book_id):
     for book in books:
         if book.id == book_id:
-            del book.library_id
-            del book.library_name
-            return jsonify(book.__dict__)
+            if hasattr(book, 'library_id'): 
+                del book.library_id
+                del book.library_name
+                return jsonify(book.__dict__)
+            else:
+                return jsonify({'error': 'Library is not assigned to this book'}), 400
     return jsonify({'error': 'Book not found'}), 404
 
 if __name__ == '__main__':
