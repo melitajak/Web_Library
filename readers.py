@@ -4,7 +4,7 @@ class Reader:
         self.name = name
 
 readers = [
-    Reader(1, "Reader 1"),
-    Reader(2, "Reader 2"),
-    Reader(3, "Reader 3"),
+    Reader(1, "James Smith"),
+    Reader(2, "Alice Wilson"),
+    Reader(3, "Michael Johnson"),
 ]
