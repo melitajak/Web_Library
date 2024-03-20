@@ -5,7 +5,7 @@ class Book:
         self.author = author
 
 books = [
-    Book(1, "Book 1", "Author 1"),
-    Book(2, "Book 2", "Author 2"),
-    Book(3, "Book 3", "Author 3"),
+    Book(1, "Animal Farm", "George Orwell"),
+    Book(2, "The Hobbit", "J.R.R. Tolkien"),
+    Book(3, "To Kill a Mockingbird", "Harper Lee"),
 ]
