@@ -60,7 +60,7 @@ def add_book():
     if title and author:
         new_book = Book(len(books) + 1, title, author)
         books.append(new_book)
-        return jsonify(new_book.__dict__), 201
+        return jsonify(new_book.__dict__), 201, {"location": f"/books/{new_book.id}"}
     return jsonify({'error': 'Invalid data supplied'}), 400
 
 #delete book
@@ -70,7 +70,7 @@ def delete_book(book_id):
     for book in books:
         if book.id == book_id:
             books.remove(book)
-            return jsonify([book.__dict__ for book in books]), 200
+            return jsonify([book.__dict__ for book in books]), 204
     return jsonify({'error': 'Book not found'}), 404
 
 #update book
@@ -111,7 +111,7 @@ def add_reader():
     if name:
         new_reader = Reader(len(readers) + 1, name)
         readers.append(new_reader)
-        return jsonify(new_reader.__dict__), 201
+        return jsonify(new_reader.__dict__), 201, {"location": f"/readers/{new_reader.id}"}
     return jsonify({'error': 'Invalid data supplied'}), 400
 
 #delete reader
@@ -121,7 +121,7 @@ def delete_reader(reader_id):
     for reader in readers:
         if reader.id == reader_id:
             readers.remove(reader)
-            return jsonify([reader.__dict__ for reader in readers]), 200
+            return jsonify([reader.__dict__ for reader in readers]), 204
     return jsonify({'error': 'Reader not found'}), 404
 
 #update reader
@@ -145,7 +145,7 @@ def add_library():
     if name:
         new_library = Library(len(libraries) + 1, name)
         libraries.append(new_library)
-        return jsonify(new_library.__dict__), 201
+        return jsonify(new_library.__dict__), 201, {"location": f"/libraries/{new_library.id}"}
     return jsonify({'error': 'Invalid data supplied'}), 400
 
 #delete library
@@ -155,7 +155,7 @@ def delete_library(library_id):
     for library in libraries:
         if library.id == library_id:
             libraries.remove(library)
-            return jsonify([library.__dict__ for library in libraries]), 200
+            return jsonify([library.__dict__ for library in libraries]), 204
     return jsonify({'error': 'Library not found'}), 404
 
 #update library
@@ -214,10 +214,10 @@ def unassign_reader(book_id):
             if hasattr(book, 'reader_id'):
                 del book.reader_id
                 del book.reader_name 
-                return jsonify(book.__dict__)
-            else:
-                return jsonify({'error': 'Reader is not assigned to this book'}), 400
+                return jsonify(book.__dict__), 204
+            return jsonify({'error': 'Reader is not assigned to this book'}), 400
     return jsonify({'error': 'Book not found'}), 404
+
 
 # Unassign the library from the book
 @app.delete('/books/<int:book_id>/library')
@@ -227,9 +227,8 @@ def unassign_library(book_id):
             if hasattr(book, 'library_id'): 
                 del book.library_id
                 del book.library_name
-                return jsonify(book.__dict__)
-            else:
-                return jsonify({'error': 'Library is not assigned to this book'}), 400
+                return jsonify(book.__dict__), 204
+            return jsonify({'error': 'Library is not assigned to this book'}), 400
     return jsonify({'error': 'Book not found'}), 404
 
 if __name__ == '__main__':
