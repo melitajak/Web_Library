@@ -51,11 +51,11 @@ Create library:
 
 Assigns a reader to a specific book:
 
-```curl -X POST -H "Content-Type: application/json" -d '{"reader_id": "1"}' http://localhost:5000/assign_reader/1```
+```curl -X PUT -H "Content-Type: application/json" -d '{"reader_id": "1"}' http://localhost:5000/books/1/reader```
 
 Assigns a library to a specific book:
 
-```curl -X POST -H "Content-Type: application/json" -d '{"library_id": "1"}' http://localhost:5000/assign_library/1```
+```curl -X PUT -H "Content-Type: application/json" -d '{"library_id": "1"}' http://localhost:5000/books/1/library```
 
 ### PUT:
 
@@ -79,7 +79,7 @@ Delete book:
 
 Unassing reader:
 
-```curl -X DELETE http://localhost:5000/assign_reader/1```
+```curl -X DELETE http://localhost:5000/books/1/reader```
 
 
 
