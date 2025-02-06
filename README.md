@@ -1,4 +1,4 @@
-# Web_Library
+Web-based library management system built with Python. It allows users to manage books, readers, and libraries through a RESTful API. The application runs in a Docker environment and provides basic operations like adding and retrieving books or assigning them to readers.
 
 ## Usage:
 
